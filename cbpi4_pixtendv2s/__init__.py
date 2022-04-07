@@ -8,70 +8,266 @@ import asyncio
 import random
 from cbpi.api import *
 
+from pixtendv2s import PiXtendV2S
+
 logger = logging.getLogger(__name__)
-
-
-class CustomWebExtension(CBPiExtension):
-
-    @request_mapping(path="/", auth_required=False)
-    async def hello_world(self, request):
-        return web.HTTPFound('static/index.html')
-
-    def __init__(self, cbpi):
-        self.cbpi = cbpi
-        path = os.path.dirname(__file__)
-        self.cbpi.register(self, "/cbpi_uiplugin", static=os.path.join(path, "static"))
+p = PiXtendV2S()
 
 
 @parameters([])
-class CustomSensor(CBPiSensor):
-    
-    def __init__(self, cbpi, id, props):
-        super(CustomSensor, self).__init__(cbpi, id, props)
-        self.value = 0
+class PixAnalogIn0(CBPiSensor):
 
-    @action(key="Test", parameters=[])
-    async def action1(self, **kwargs):
-        print("ACTION!", kwargs)
+    def __init__(self, cbpi, id, props):
+        super(PixAnalogIn0, self).__init__(cbpi, id, props)
 
     async def run(self):
-        while self.running is True:
-            self.value = random.randint(0,50)
+        while self.running:
+            self.value = p.analog_in0
+
+            self.log_data(self.value)
+
             self.push_update(self.value)
             await asyncio.sleep(1)
-    
+
     def get_state(self):
         return dict(value=self.value)
 
 @parameters([])
-class CustomActor(CBPiActor):
+class PixAnalogIn1(CBPiSensor):
 
-    @action("action", parameters={})
-    async def action(self, **kwargs):
-        print("Action Triggered", kwargs)
-        pass
-    
-    def on_start(self):
-        self.state = False
-        pass
+    def __init__(self, cbpi, id, props):
+        super(PixAnalogIn1, self).__init__(cbpi, id, props)
 
-    async def on(self, power=0):
-        logger.info("ACTOR 1111 %s ON" % self.id)
-        self.state = True
+    async def run(self):
+        while self.running:
+            self.value = p.analog_in1
 
-    async def off(self):
-        logger.info("ACTOR %s OFF " % self.id)
-        self.state = False
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
 
     def get_state(self):
-        return self.state
-    
+        return dict(value=self.value)
+
+
+@parameters([])
+class PixDigitalIn0(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixDigitalIn0, self).__init__(cbpi, id, props)
+
     async def run(self):
-        pass
+        while self.running:
+
+            if p.digital_in0:
+                self.value = 1
+            else:
+                self.value = 0
+
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
+
+@parameters([])
+class PixDigitalIn1(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixDigitalIn1, self).__init__(cbpi, id, props)
+
+    async def run(self):
+        while self.running:
+
+            if p.digital_in1:
+                self.value = 1
+            else:
+                self.value = 0
+
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
+
+@parameters([])
+class PixDigitalIn2(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixDigitalIn2, self).__init__(cbpi, id, props)
+
+    async def run(self):
+        while self.running:
+
+            if p.digital_in2:
+                self.value = 1
+            else:
+                self.value = 0
+
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
+
+@parameters([])
+class PixDigitalIn3(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixDigitalIn3, self).__init__(cbpi, id, props)
+
+    async def run(self):
+        while self.running:
+
+            if p.digital_in3:
+                self.value = 1
+            else:
+                self.value = 0
+
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
+
+@parameters([])
+class PixDigitalIn4(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixDigitalIn4, self).__init__(cbpi, id, props)
+
+    async def run(self):
+        while self.running:
+
+            if p.digital_in4:
+                self.value = 1
+            else:
+                self.value = 0
+
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
+
+@parameters([])
+class PixDigitalIn5(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixDigitalIn5, self).__init__(cbpi, id, props)
+
+    async def run(self):
+        while self.running:
+
+            if p.digital_in5:
+                self.value = 1
+            else:
+                self.value = 0
+
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
+
+@parameters([])
+class PixDigitalIn6(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixDigitalIn6, self).__init__(cbpi, id, props)
+
+    async def run(self):
+        while self.running:
+
+            if p.digital_in6:
+                self.value = 1
+            else:
+                self.value = 0
+
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
+
+@parameters([])
+class PixDigitalIn7(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixDigitalIn7, self).__init__(cbpi, id, props)
+
+    async def run(self):
+        while self.running:
+
+            if p.digital_in7:
+                self.value = 1
+            else:
+                self.value = 0
+
+            self.log_data(self.value)
+
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
+
+
+@parameters([Property.Select(label="Input", options=["analog_in0", "analog_in1"], description="Select PiXtend analog input to use."),
+             Property.Select(label="Voltage", options=[5, 10], description="Is the input set to 5 or 10 V?"),
+             Property.Number(label="t_min", description="Enter the lowest temperature the signal converter is set to."),
+             Property.Number(label="t_max", description="Enter the highest temperature the signal converter is set to.")])
+class PixPT100(CBPiSensor):
+
+    def __init__(self, cbpi, id, props):
+        super(PixPT100, self).__init__(cbpi, id, props)
+        self.input = self.props.get("Input", None)
+        self.volt = self.props.get("Voltage", 10)
+        self.t_min = self.props.get("t_min", None)
+        self.t_max = self.props.get("t_max", None)
+
+    async def run(self):
+        while self.running:
+            if self.input == "analog_in0":
+                self.raw = p.analog_in0
+            elif self.input == "analog_in1":
+                self.raw = p.analog_in1
+            else:
+                self.raw = None
+
+            self.value = round((float(self.raw) * ((int(self.t_max) - int(self.t_min)) / int(self.volt))) + int(self.t_min), 1)
+            self.push_update(self.value)
+            await asyncio.sleep(1)
+
+    def get_state(self):
+        return dict(value=self.value)
 
 
 def setup(cbpi):
-    #cbpi.plugin.register("MyCustomActor", CustomActor)
-    #cbpi.plugin.register("MyCustomSensor", CustomSensor)
-    #cbpi.plugin.register("MyustomWebExtension", CustomWebExtension)
+    cbpi.plugin.register("PT100 (PiXtendV2S)", PixPT100)
+    cbpi.plugin.register("analog_in0 (PiXtendV2S)", PixAnalogIn0)
+    cbpi.plugin.register("analog_in1 (PiXtendV2S)", PixAnalogIn1)
+    cbpi.plugin.register("digital_in0 (PiXtendV2S)", PixDigitalIn0)
+    cbpi.plugin.register("digital_in1 (PiXtendV2S)", PixDigitalIn1)
+    cbpi.plugin.register("digital_in2 (PiXtendV2S)", PixDigitalIn2)
+    cbpi.plugin.register("digital_in3 (PiXtendV2S)", PixDigitalIn3)
+    cbpi.plugin.register("digital_in4 (PiXtendV2S)", PixDigitalIn4)
+    cbpi.plugin.register("digital_in5 (PiXtendV2S)", PixDigitalIn5)
+    cbpi.plugin.register("digital_in6 (PiXtendV2S)", PixDigitalIn6)
+    cbpi.plugin.register("digital_in7 (PiXtendV2S)", PixDigitalIn7)
     pass
