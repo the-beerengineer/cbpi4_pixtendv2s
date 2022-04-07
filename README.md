@@ -2,6 +2,8 @@
 
 Adds support for the PiXtendV2S extension board to CraftBeerPi 4
 
+Currently only adds the analog and digital inputs as sensors as well as a way to use a PT100 temp probe with the analoge inputs.
+
 The PiXtend extension boards add IEC 61131-2 compliant PLC inputs and outputs to a Raspberry Pi.  
 
 
