@@ -1,1 +1,0 @@
-# craftbeerpi4-plugin-template
