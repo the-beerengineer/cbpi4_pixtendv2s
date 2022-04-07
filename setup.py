@@ -11,5 +11,5 @@ setup(name='cbpi4_pixtendv2s',
         # If any package contains *.txt or *.rst files, include them:
       '': ['*.txt', '*.rst', '*.yaml'],
       'cbpi4_pixtendv2s': ['*','*.txt', '*.rst', '*.yaml']},
-      packages=['cbpi4_pixtendv2s', 'pixtendv2s'],
+      packages=['cbpi4_pixtendv2s'],
      )
