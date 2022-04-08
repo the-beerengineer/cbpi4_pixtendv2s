@@ -120,7 +120,6 @@ class PixDigitalOutputs(CBPiActor):
 
         self.state = True
 
-
     async def off(self):
         if self.output == "digital_out0":
             p.digital_out0 = False
@@ -130,6 +129,16 @@ class PixDigitalOutputs(CBPiActor):
             self.state = None
 
         self.state = False
+
+    def get_state(self):
+        return self.state
+
+    async def run(self):
+        while self.running:
+            await asyncio.sleep(1)
+
+    async def set_power(self, power):
+        pass
         
 
 
