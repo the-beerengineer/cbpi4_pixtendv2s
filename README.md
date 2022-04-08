@@ -32,6 +32,7 @@ Requires the 'PiXtend Python Library V2', or PPLV2, for short.
 
 ## ToDo:
 
+- Add analog outputs
 - Add PWMs
 - Add GPIOs
 - Add DHT11 and DHT22 sensors
