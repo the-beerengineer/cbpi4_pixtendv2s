@@ -105,6 +105,11 @@ class PixPT100(CBPiSensor):
 @parameters([Property.Select(label="Output", options=["digital_out0", "digital_out1"], description="Select PiXtend digital output to use.")])
 class PixDigitalOutputs(CBPiActor):
 
+    async def on_start(self):
+        self.power = None
+        self.output = self.props.get("Output", None)
+        self.state = False
+
     async def on(self, power=0):
         if self.output == "digital_out0":
             self.state = True
