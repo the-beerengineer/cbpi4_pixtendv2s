@@ -2,7 +2,7 @@
 
 ## Adds support for the PiXtendV2S extension board to CraftBeerPi 4
 
-The PiXtend extension boards add IEC 61131-2 compliant PLC inputs and outputs to a Raspberry Pi.  
+The PiXtend extension board adds IEC 61131-2 compliant PLC inputs and outputs to a Raspberry Pi.  
 Requires the 'PiXtend Python Library V2', or PPLV2, for short.
 
 ## Currently adds the following to CBPi4:
