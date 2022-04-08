@@ -36,6 +36,7 @@ class PixAnalogInputs(CBPiSensor):
     def get_state(self):
         return dict(value=self.value)
 
+
 @parameters([Property.Select(label="Input", options=["digital_in0", "digital_in1", "digital_in2", "digital_in3", "digital_in4", "digital_in5", "digital_in6", "digital_in7"], description="Select PiXtend digital input to use.")])
 class PixDigitalInputs(CBPiSensor):
 
@@ -63,218 +64,6 @@ class PixDigitalInputs(CBPiSensor):
                 self.value = p.digital_in7
             else:
                 self.raw = None
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixAnalogIn0(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixAnalogIn0, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-            self.value = p.analog_in0
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixAnalogIn1(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixAnalogIn1, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-            self.value = p.analog_in1
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixDigitalIn0(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixDigitalIn0, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-
-            if p.digital_in0:
-                self.value = 1
-            else:
-                self.value = 0
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixDigitalIn1(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixDigitalIn1, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-
-            if p.digital_in1:
-                self.value = 1
-            else:
-                self.value = 0
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixDigitalIn2(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixDigitalIn2, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-
-            if p.digital_in2:
-                self.value = 1
-            else:
-                self.value = 0
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixDigitalIn3(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixDigitalIn3, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-
-            if p.digital_in3:
-                self.value = 1
-            else:
-                self.value = 0
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixDigitalIn4(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixDigitalIn4, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-
-            if p.digital_in4:
-                self.value = 1
-            else:
-                self.value = 0
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixDigitalIn5(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixDigitalIn5, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-
-            if p.digital_in5:
-                self.value = 1
-            else:
-                self.value = 0
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixDigitalIn6(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixDigitalIn6, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-
-            if p.digital_in6:
-                self.value = 1
-            else:
-                self.value = 0
-
-            self.log_data(self.value)
-
-            self.push_update(self.value)
-            await asyncio.sleep(1)
-
-    def get_state(self):
-        return dict(value=self.value)
-
-@parameters([])
-class PixDigitalIn7(CBPiSensor):
-
-    def __init__(self, cbpi, id, props):
-        super(PixDigitalIn7, self).__init__(cbpi, id, props)
-
-    async def run(self):
-        while self.running:
-
-            if p.digital_in7:
-                self.value = 1
-            else:
-                self.value = 0
-
-            self.log_data(self.value)
 
             self.push_update(self.value)
             await asyncio.sleep(1)
@@ -313,18 +102,38 @@ class PixPT100(CBPiSensor):
         return dict(value=self.value)
 
 
+@parameters([Property.Select(label="Output", options=["analog_out0", "analog_out1"], description="Select PiXtend analog output to use.")])
+class PixAnalogOutputs(CBPiSensor):
+
+    def __init__(self):
+        self.state = False
+        self.output = self.props.get("Output", None)
+        pass
+
+    async def on(self, power=0):
+        if self.output == "analog_out0":
+            self.state = True
+            p.analog_out0 = self.state
+        elif self.output == "analog_out1":
+            self.state = True
+            p.analog_out1 = self.state
+        else:
+            self.state = None
+
+    async def off(self):
+        if self.output == "analog_out0":
+            self.state = False
+            p.analog_out0 = self.state
+        elif self.output == "analog_out1":
+            self.state = False
+            p.analog_out1 = self.state
+        else:
+            self.state = None
+
+
 def setup(cbpi):
     cbpi.plugin.register("PT100 (PiXtendV2S)", PixPT100)
     cbpi.plugin.register("Analog Input (PiXtendV2S)", PixAnalogInputs)
     cbpi.plugin.register("Digital Input (PiXtendV2S)", PixDigitalInputs)
-    cbpi.plugin.register("analog_in0 (PiXtendV2S)", PixAnalogIn0)
-    cbpi.plugin.register("analog_in1 (PiXtendV2S)", PixAnalogIn1)
-    cbpi.plugin.register("digital_in0 (PiXtendV2S)", PixDigitalIn0)
-    cbpi.plugin.register("digital_in1 (PiXtendV2S)", PixDigitalIn1)
-    cbpi.plugin.register("digital_in2 (PiXtendV2S)", PixDigitalIn2)
-    cbpi.plugin.register("digital_in3 (PiXtendV2S)", PixDigitalIn3)
-    cbpi.plugin.register("digital_in4 (PiXtendV2S)", PixDigitalIn4)
-    cbpi.plugin.register("digital_in5 (PiXtendV2S)", PixDigitalIn5)
-    cbpi.plugin.register("digital_in6 (PiXtendV2S)", PixDigitalIn6)
-    cbpi.plugin.register("digital_in7 (PiXtendV2S)", PixDigitalIn7)
+    cbpi.plugin.register("Analog Output (PiXtendV2S)", PixAnalogOutputs)
     pass
