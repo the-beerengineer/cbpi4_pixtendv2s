@@ -14,7 +14,7 @@ Requires the 'PiXtend Python Library V2', or PPLV2, for short.
 - **Digital Input (PiXtendV2S)**  
   Returns the state of the selected digital input as int, where 0 = False/OFF and 1 = True/ON
   
-- **PT100 (PiXtendV2S)**
+- **PT100 (PiXtendV2S)**  
   Allows an analog input to be configured for a PT resistance thermometer (not just PT100).  
   Requires a hardware signal converter that sends a 0...5 or 0...10 V signal to one of the analog inputs  
   Input = analog input to use  
