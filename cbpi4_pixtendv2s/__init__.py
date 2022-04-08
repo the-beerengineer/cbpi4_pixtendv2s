@@ -105,11 +105,6 @@ class PixPT100(CBPiSensor):
 @parameters([Property.Select(label="Output", options=["digital_out0", "digital_out1"], description="Select PiXtend digital output to use.")])
 class PixDigitalOutputs(CBPiActor):
 
-    def __init__(self):
-        self.state = False
-        self.output = self.props.get("Output", None)
-        pass
-
     async def on(self, power=0):
         if self.output == "digital_out0":
             self.state = True
@@ -135,5 +130,5 @@ def setup(cbpi):
     cbpi.plugin.register("PT100 (PiXtendV2S)", PixPT100)
     cbpi.plugin.register("Analog Input (PiXtendV2S)", PixAnalogInputs)
     cbpi.plugin.register("Digital Input (PiXtendV2S)", PixDigitalInputs)
-    cbpi.plugin.register("Analog Output (PiXtendV2S)", PixDigitalOutputs)
+    cbpi.plugin.register("Digital Output (PiXtendV2S)", PixDigitalOutputs)
     pass
