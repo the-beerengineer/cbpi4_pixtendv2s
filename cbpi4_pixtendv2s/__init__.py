@@ -110,25 +110,27 @@ class PixDigitalOutputs(CBPiActor):
         self.output = self.props.get("Output", None)
         self.state = False
 
-    async def on(self, power=0):
+    async def on(self, power = None):
         if self.output == "digital_out0":
-            self.state = True
-            p.digital_out0 = self.state
+            p.digital_out0 = True
         elif self.output == "digital_out1":
-            self.state = True
-            p.digital_out1 = self.state
+            p.digital_out1 = True
         else:
             self.state = None
 
+        self.state = True
+
+
     async def off(self):
         if self.output == "digital_out0":
-            self.state = False
-            p.digital_out0 = self.state
+            p.digital_out0 = False
         elif self.output == "digital_out1":
-            self.state = False
-            p.digital_out1 = self.state
+            p.digital_out1 = False
         else:
             self.state = None
+
+        self.state = False
+        
 
 
 def setup(cbpi):
