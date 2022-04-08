@@ -102,7 +102,7 @@ class PixPT100(CBPiSensor):
         return dict(value=self.value)
 
 
-@parameters([Property.Select(label="Output", options=["digital_out0", "digital_out1"], description="Select PiXtend digital output to use.")])
+@parameters([Property.Select(label="Output", options=["digital_out0", "digital_out1", "digital_out2", "digital_out3", "digital_out4", "digital_out5", "digital_out6", "digital_out7"], description="Select PiXtend digital output to use.")])
 class PixDigitalOutputs(CBPiActor):
 
     async def on_start(self):
@@ -115,6 +115,18 @@ class PixDigitalOutputs(CBPiActor):
             p.digital_out0 = True
         elif self.output == "digital_out1":
             p.digital_out1 = True
+        elif self.output == "digital_out2":
+            p.digital_out2 = True
+        elif self.output == "digital_out3":
+            p.digital_out3 = True
+        elif self.output == "digital_out4":
+            p.digital_out4 = True
+        elif self.output == "digital_out5":
+            p.digital_out5 = True
+        elif self.output == "digital_out6":
+            p.digital_out6 = True
+        elif self.output == "digital_out7":
+            p.digital_out7 = True
         else:
             self.state = None
 
@@ -125,6 +137,64 @@ class PixDigitalOutputs(CBPiActor):
             p.digital_out0 = False
         elif self.output == "digital_out1":
             p.digital_out1 = False
+        elif self.output == "digital_out2":
+            p.digital_out2 = False
+        elif self.output == "digital_out3":
+            p.digital_out3 = False
+        elif self.output == "digital_out4":
+            p.digital_out4 = False
+        elif self.output == "digital_out5":
+            p.digital_out5 = False
+        elif self.output == "digital_out6":
+            p.digital_out6 = False
+        elif self.output == "digital_out7":
+            p.digital_out7 = False
+        else:
+            self.state = None
+
+        self.state = False
+
+    def get_state(self):
+        return self.state
+
+    async def run(self):
+        while self.running:
+            await asyncio.sleep(1)
+
+    async def set_power(self, power):
+        pass
+        
+@parameters([Property.Select(label="Output", options=["relay0", "relay1", "relay2", "relay3"], description="Select PiXtend relay to use.")])
+class PixRelays(CBPiActor):
+
+    async def on_start(self):
+        self.power = None
+        self.output = self.props.get("Output", None)
+        self.state = False
+
+    async def on(self, power = None):
+        if self.output == "relay0":
+            p.relay0 = True
+        elif self.output == "relay1":
+            p.relay1 = True
+        elif self.output == "relay2":
+            p.relay2 = True
+        elif self.output == "relay3":
+            p.relay3 = True
+        else:
+            self.state = None
+
+        self.state = True
+
+    async def off(self):
+        if self.output == "relay0":
+            p.relay0 = False
+        elif self.output == "relay1":
+            p.relay1 = False
+        elif self.output == "relay2":
+            p.relay2 = False
+        elif self.output == "relay3":
+            p.relay3 = False
         else:
             self.state = None
 
@@ -141,10 +211,10 @@ class PixDigitalOutputs(CBPiActor):
         pass
         
 
-
 def setup(cbpi):
     cbpi.plugin.register("PT100 (PiXtendV2S)", PixPT100)
     cbpi.plugin.register("Analog Input (PiXtendV2S)", PixAnalogInputs)
     cbpi.plugin.register("Digital Input (PiXtendV2S)", PixDigitalInputs)
     cbpi.plugin.register("Digital Output (PiXtendV2S)", PixDigitalOutputs)
+    cbpi.plugin.register("Relay (PiXtendV2S)", PixRelays)
     pass
