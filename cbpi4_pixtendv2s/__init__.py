@@ -102,8 +102,8 @@ class PixPT100(CBPiSensor):
         return dict(value=self.value)
 
 
-@parameters([Property.Select(label="Output", options=["analog_out0", "analog_out1"], description="Select PiXtend analog output to use.")])
-class PixAnalogOutputs(CBPiSensor):
+@parameters([Property.Select(label="Output", options=["digital_out0", "digital_out1"], description="Select PiXtend digital output to use.")])
+class PixDigitalOutputs(CBPiSensor):
 
     def __init__(self):
         self.state = False
@@ -111,22 +111,22 @@ class PixAnalogOutputs(CBPiSensor):
         pass
 
     async def on(self, power=0):
-        if self.output == "analog_out0":
+        if self.output == "digital_out0":
             self.state = True
-            p.analog_out0 = self.state
-        elif self.output == "analog_out1":
+            p.digital_out0 = self.state
+        elif self.output == "digital_out1":
             self.state = True
-            p.analog_out1 = self.state
+            p.digital_out1 = self.state
         else:
             self.state = None
 
     async def off(self):
-        if self.output == "analog_out0":
+        if self.output == "digital_out0":
             self.state = False
-            p.analog_out0 = self.state
-        elif self.output == "analog_out1":
+            p.digital_out0 = self.state
+        elif self.output == "digital_out1":
             self.state = False
-            p.analog_out1 = self.state
+            p.digital_out1 = self.state
         else:
             self.state = None
 
@@ -135,5 +135,5 @@ def setup(cbpi):
     cbpi.plugin.register("PT100 (PiXtendV2S)", PixPT100)
     cbpi.plugin.register("Analog Input (PiXtendV2S)", PixAnalogInputs)
     cbpi.plugin.register("Digital Input (PiXtendV2S)", PixDigitalInputs)
-    cbpi.plugin.register("Analog Output (PiXtendV2S)", PixAnalogOutputs)
+    cbpi.plugin.register("Analog Output (PiXtendV2S)", PixDigitalOutputs)
     pass
