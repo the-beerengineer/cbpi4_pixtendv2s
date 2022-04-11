@@ -311,4 +311,5 @@ def setup(cbpi):
     cbpi.plugin.register("Digital Input (PiXtendV2S)", PixDigitalInputs)
     cbpi.plugin.register("Digital Output (PiXtendV2S)", PixDigitalOutputs)
     cbpi.plugin.register("Relay (PiXtendV2S)", PixRelays)
+    cbpi.plugin.register("Buzzer", Buzzer)
     pass
