@@ -1,18 +1,22 @@
 
 # -*- coding: utf-8 -*-
-import os
+import os, threading, time
 from aiohttp import web
 import logging
-from unittest.mock import MagicMock, patch
 import asyncio
 import random
 from cbpi.api import *
+from cbpi.api.config import ConfigType
+from cbpi.api.base import CBPiBase
 
 from pixtendv2s import PiXtendV2S
 
 logger = logging.getLogger(__name__)
 p = PiXtendV2S()
 
+buzzer_output = None
+buzzer_level = None
+buzzer = None
 
 @parameters([Property.Select(label="Input", options=["analog_in0", "analog_in1"], description="Select PiXtend analog input to use.")])
 class PixAnalogInputs(CBPiSensor):
@@ -210,6 +214,96 @@ class PixRelays(CBPiActor):
     async def set_power(self, power):
         pass
         
+class BuzzerThread (threading.Thread):
+
+    def __init__(self, duration, output, level):
+        threading.Thread.__init__(self)
+        self.output = output
+        self.duration = duration
+        self.level = level
+        self.runnig = True
+
+    def shutdown(self):
+        pass
+
+    def stop(self):
+        pass
+
+    def run(self):
+        pass
+
+
+
+class Buzzer(CBPiExtension):
+
+    def __init__(self,cbpi):
+        self.cbpi = cbpi
+        self._task = asyncio.create_task(self.run())
+
+
+    async def run(self):
+        self.duration = 0.1
+        logger.info('Starting Buzzer background task')
+        await self.buzzer_output()
+        await self.buzzer_level()
+        if buzzer_output is None or buzzer_output == "" or not buzzer_output:
+            logger.warning('Check buzzer GPIO is set')
+        if buzzer_level is None or buzzer_level == "" or not buzzer_level:
+            logger.warning('Check buzzer level is set') 
+        else:
+            self.listener_ID = self.cbpi.notification.add_listener(self.buzzerEvent)
+            logger.info("Buzzer Lisetener ID: {}".format(self.listener_ID))
+            logging.info("Buzzer started")
+            await self.start_buzz()
+        pass
+
+    async def buzzer_output(self):
+        global buzzer_output
+        buzzer_output = self.cbpi.config.get("buzzer_output", None)
+        if buzzer_output is None:
+            logger.info("INIT Buzzer GPIO")
+            try:
+                await self.cbpi.config.add("buzzer_output", ConfigType.SELECT, "Buzzer Output", [{"label": "digital_out0", "value": p.digital_out0},
+                                                                                                {"label": "digital_out1", "value": p.digital_out1},
+                                                                                                {"label": "digital_out2", "value": p.digital_out2},
+                                                                                                {"label": "digital_out3", "value": p.digital_out3},
+                                                                                                {"label": "digital_out4", "value": p.digital_out4},
+                                                                                                {"label": "digital_out5", "value": p.digital_out5},
+                                                                                                {"label": "digital_out6", "value": p.digital_out6},
+                                                                                                {"label": "digital_out7", "value": p.digital_out7}])
+                buzzer_output = self.cbpi.config.get("buzzer_output", None)
+            except:
+                logger.warning('Unable to update config')
+                
+    async def buzzer_level(self):
+        global buzzer_level
+        buzzer_level = self.cbpi.config.get("buzzer_level", None)
+        if buzzer_level is None:
+            logger.info("INIT Buzzer Beep Level")
+            try:
+                await self.cbpi.config.add("buzzer_level", "HIGH", ConfigType.SELECT, "Buzzer Beep Level", [{"label": "HIGH","value": "HIGH"},
+                                                                                                            {"label": "LOW", "value": "LOW"}])
+                buzzer_level = self.cbpi.config.get("buzzer_level", None)
+            except:
+                logger.warning('Unable to update database')
+
+    async def buzzerEvent(self, cbpi, title, message, type, action):
+        if str(type) == "info" or str(type) == "success":
+            type = "standard"
+        else:
+            type = str(type)
+
+        self.buzzer = BuzzerThread(self.duration,buzzer_output,buzzer_level)
+        self.buzzer.daemon = False
+        self.buzzer.start()
+        self.buzzer.stop()
+
+    async def start_buzz(self):
+        self.buzzer = BuzzerThread(self.duration,buzzer_output,buzzer_level)
+        self.buzzer.daemon = False
+        self.buzzer.start()
+        self.buzzer.stop()
+
 
 def setup(cbpi):
     cbpi.plugin.register("PT100 (PiXtendV2S)", PixPT100)
