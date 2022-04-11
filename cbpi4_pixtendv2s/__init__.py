@@ -216,11 +216,11 @@ class PixRelays(CBPiActor):
         
 
 
+
 def setup(cbpi):
     cbpi.plugin.register("PT100 (PiXtendV2S)", PixPT100)
     cbpi.plugin.register("Analog Input (PiXtendV2S)", PixAnalogInputs)
     cbpi.plugin.register("Digital Input (PiXtendV2S)", PixDigitalInputs)
     cbpi.plugin.register("Digital Output (PiXtendV2S)", PixDigitalOutputs)
     cbpi.plugin.register("Relay (PiXtendV2S)", PixRelays)
-    #cbpi.plugin.register("Buzzer", Buzzer)
     pass
