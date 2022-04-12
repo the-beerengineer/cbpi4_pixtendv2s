@@ -245,8 +245,10 @@ class PixBuzzer(CBPiExtension):
             gpio = pixbuzzer_gpio
             p.gpio0_ctrl = 1
             p.gpio0 = True
+            p.digital_out0 = True
             time.sleep(0.1)
             p.gpio0 = False
+            p.digital_out0 = False
 
 
 def setup(cbpi):
