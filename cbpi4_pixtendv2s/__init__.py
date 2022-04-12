@@ -241,7 +241,7 @@ class PixBuzzer(CBPiExtension):
             except:
                 logger.warning('Unable to update config')
 
-    async def pixBuzz(self, cbpi):
+    async def pixBuzz(self, cbpi, *args, **kwargs):
             p.relay0 = True
 
 
