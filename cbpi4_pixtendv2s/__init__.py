@@ -220,31 +220,79 @@ class PixBuzzer(CBPiExtension):
 
     async def run(self):
         logger.info('Starting PixBuzzer Notifications background task')
-        await self.pixbuzzerGPIO()
-        if pixbuzzer_gpio is None or pixbuzzer_gpio == "" or not pixbuzzer_gpio:
-            logger.warning('Check pixbuzzer GPIO is set')
+        await self.pixbuzzerDuration()
+        await self.pixbuzzerDO()
+        if pixbuzzer_do is None or pixbuzzer_do == "" or not pixbuzzer_do:
+            logger.warning('Check pixbuzzer digital_out is set')
+        elif pixbuzzer_duration is None or pixbuzzer_duration == "" or not pixbuzzer_duration:
+            logger.warning('Check pixbuzzer duration ist set')
         else:
             self.listener_ID = self.cbpi.notification.add_listener(self.pixBuzz)
             logger.info("PixBuzzer Lisetener ID: {}".format(self.listener_ID))
         pass
 
-    async def pixbuzzerGPIO(self):
-        global pixbuzzer_gpio
-        pixbuzzer_gpio = self.cbpi.config.get("pixbuzzer_gpio", None)
-        if pixbuzzer_gpio is None:
-            logger.info("INIT PixBuzzer GPIO")
+    async def pixbuzzerDO(self):
+        global pixbuzzer_do
+        pixbuzzer_do = self.cbpi.config.get("pixbuzzer_do", None)
+        if pixbuzzer_do is None:
+            logger.info("INIT PixBuzzer Digital Output")
             try:
-                await self.cbpi.config.add("pixbuzzer_gpio", "", ConfigType.SELECT, "PixBuzzer GPIO", [{"label": "0", "value": p.gpio0},
-                                                                                                        {"label": "1", "value": p.gpio1},
-                                                                                                        {"label": "2", "value": p.gpio2},
-                                                                                                        {"label": "3", "value": p.gpio3}])
+                await self.cbpi.config.add("pixbuzzer_do", "", ConfigType.SELECT, "PixBuzzer Digital Out", [{"label": "digital_out0", "value": "digital_out0"},
+                                                                                                        {"label": "digital_out1", "value": "digital_out1"},
+                                                                                                        {"label": "digital_out2", "value": "digital_out2"},
+                                                                                                        {"label": "digital_out3", "value": "digital_out3"},
+                                                                                                        {"label": "digital_out4", "value": "digital_out4"},
+                                                                                                        {"label": "digital_out5", "value": "digital_out5"},
+                                                                                                        {"label": "digital_out6", "value": "digital_out6"},
+                                                                                                        {"label": "digital_out7", "value": "digital_out7"}])
+                pixbuzzer_do = self.cbpi.config.get("pixbuzzer_do", None)
+            except:
+                logger.warning('Unable to update config')
+
+    async def pixbuzzerDuration(self):
+        global pixbuzzer_duration
+        pixbuzzer_duration = self.cbpi.config.get("pixbuzzer_duration", None)
+        if pixbuzzer_duration is None:
+            logger.info("INIT PixBuzzer Duration")
+            try:
+                await self.cbpi.config.add("pixbuzzer_duration", 0.2, ConfigType.NUMBER, "PixBuzzer Duration")
+                pixbuzzer_duration = self.cbpi.config.get("pixbuzzer_duration", None)
             except:
                 logger.warning('Unable to update config')
 
     async def pixBuzz(self, cbpi, *args, **kwargs):
+        if pixbuzzer_do == "digital_out0":
+            p.digital_out0 = True
+            time.sleep(pixbuzzer_duration)
+            p.digital_out0 = False
+        elif pixbuzzer_do == "digital_out1":
             p.digital_out1 = True
-            time.sleep(0.1)
+            time.sleep(pixbuzzer_duration)
             p.digital_out1 = False
+        elif pixbuzzer_do == "digital_out2":
+            p.digital_out2 = True
+            time.sleep(pixbuzzer_duration)
+            p.digital_out2 = False
+        elif pixbuzzer_do == "digital_out3":
+            p.digital_out3 = True
+            time.sleep(pixbuzzer_duration)
+            p.digital_out3 = False
+        elif pixbuzzer_do == "digital_out4":
+            p.digital_out4 = True
+            time.sleep(pixbuzzer_duration)
+            p.digital_out4 = False
+        elif pixbuzzer_do == "digital_out5":
+            p.digital_out5 = True
+            time.sleep(pixbuzzer_duration)
+            p.digital_out5 = False
+        elif pixbuzzer_do == "digital_out6":
+            p.digital_out6 = True
+            time.sleep(pixbuzzer_duration)
+            p.digital_out6 = False
+        elif pixbuzzer_do == "digital_out7":
+            p.digital_out7 = True
+            time.sleep(pixbuzzer_duration)
+            p.digital_out7 = False
 
 
 def setup(cbpi):
