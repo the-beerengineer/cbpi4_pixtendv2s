@@ -29,6 +29,13 @@ Requires the 'PiXtend Python Library V2', or PPLV2, for short.
   Allows the selected digital output to be toggled on and off  
 - **Relay (PiXtendV2S)**  
   Allows the selected relay to be toggled on and off
+  
+  
+### Other Extensions:
+- **PixBuzzer**  
+  A custom buzzer that uses one of the digital outputs of the board  
+  Go to the settings and select one of the digital_outs ("pixbuzzer_do") and the duration of the buzzing noise ("pixbuzzer_duration") 
+  The buzzer is triggered every time a notification is sent by the system
 
 ## ToDo:
 
