@@ -14,9 +14,6 @@ from pixtendv2s import PiXtendV2S
 logger = logging.getLogger(__name__)
 p = PiXtendV2S()
 
-buzzer_gpio = None
-buzzer_level = None
-buzzer = None
 
 @parameters([Property.Select(label="Input", options=["analog_in0", "analog_in1"], description="Select PiXtend analog input to use.")])
 class PixAnalogInputs(CBPiSensor):
@@ -214,43 +211,7 @@ class PixRelays(CBPiActor):
     async def set_power(self, power):
         pass
         
-class BuzzerThread (threading.Thread):
-
-    def __init__(self, sound,gpio,level):
-        threading.Thread.__init__(self)
-        self.gpio = gpio
-        self.sound = sound
-        self.level = level
-        self.runnig = True
-
-    def shutdown(self):
-        pass
-
-    def stop(self):
-        pass
-
-    def run(self):
-        try:
-            for i in self.sound:
-                if (isinstance(i, str)):
-                    if i == "H" and self.level == "HIGH":
-                        GPIO.output(int(self.gpio), GPIO.HIGH)
-                    elif i == "H" and self.level != "HIGH":
-                        GPIO.output(int(self.gpio), GPIO.LOW)
-                    elif i == "L" and self.level == "HIGH":
-                        GPIO.output(int(self.gpio), GPIO.LOW)
-                    else:
-                        GPIO.output(int(self.gpio), GPIO.HIGH)
-                else:
-                    time.sleep(i)
-        except Exception as e:
-            pass
-        finally:
-            pass
-
-
-
-class Buzzer(CBPiExtension):
+class PixBuzzer(CBPiExtension):
 
     def __init__(self,cbpi):
         self.cbpi = cbpi
@@ -258,92 +219,34 @@ class Buzzer(CBPiExtension):
 
 
     async def run(self):
-        self.sound = {'standard':["H", 0.1, "L", 0.1, "H", 0.1, "L", 0.1, "H", 0.1, "L"],
-                      'warning':["H", 0.2, "L", 0.1, "H", 0.1, "L", 0.1, "H", 0.2, "L"],
-                      'error':["H", 0.3, "L", 0.1, "H", 0.3, "L", 0.1, "H", 0.3, "L"]}
-        logger.info('Starting Buzzer background task')
-        await self.buzzer_gpio()
-        await self.buzzer_level()
-        if buzzer_gpio is None or buzzer_gpio == "" or not buzzer_gpio:
-            logger.warning('Check buzzer GPIO is set')
-        if buzzer_level is None or buzzer_level == "" or not buzzer_level:
-            logger.warning('Check buzzer level is set') 
+        logger.info('Starting PixBuzzer Notifications background task')
+        await self.pixbuzzerGPIO()
+        if pixbuzzer_gpio is None or pixbuzzer_gpio == "" or not pixbuzzer_gpio:
+            logger.warning('Check pixbuzzer GPIO is set')
         else:
-            self.listener_ID = self.cbpi.notification.add_listener(self.buzzerEvent)
-            logger.info("Buzzer Lisetener ID: {}".format(self.listener_ID))
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(buzzer_gpio, GPIO.OUT)
-            p.gpio0_ctrl = 1
-            logging.info("Buzzer started")
-            await self.start_buzz()
+            self.listener_ID = self.cbpi.notification.add_listener(self.pixBuzz)
+            logger.info("PixBuzzer Lisetener ID: {}".format(self.listener_ID))
         pass
 
-    async def buzzer_gpio(self):
-        global buzzer_gpio
-        buzzer_gpio = self.cbpi.config.get("buzzer_gpio", None)
-        if buzzer_gpio is None:
-            logger.info("INIT Buzzer GPIO")
+    async def pixbuzzerGPIO(self):
+        global pixbuzzer_gpio
+        pixbuzzer_gpio = self.cbpi.config.get("pixbuzzer_gpio", None)
+        if pixbuzzer_gpio is None:
+            logger.info("INIT PixBuzzer GPIO")
             try:
-                await self.cbpi.config.add("buzzer_gpio", p.gpio0, ConfigType.SELECT, "Buzzer GPIO", [{"label": "0", "value": p.gpio0},
-                                                                                                {"label": "1", "value": 1},
-                                                                                                {"label": "2", "value": 2},
-                                                                                                {"label": "3", "value": 3},
-                                                                                                {"label": "4", "value": 4},
-                                                                                                {"label": "5", "value": 5},
-                                                                                                {"label": "6", "value": 6},
-                                                                                                {"label": "7", "value": 7},
-                                                                                                {"label": "8", "value": 8},
-                                                                                                {"label": "9", "value": 9},
-                                                                                                {"label": "10", "value": 10},
-                                                                                                {"label": "11", "value": 11},
-                                                                                                {"label": "12", "value": 12},
-                                                                                                {"label": "13", "value": 13},
-                                                                                                {"label": "14", "value": 14},
-                                                                                                {"label": "15", "value": 15},
-                                                                                                {"label": "16", "value": 16},
-                                                                                                {"label": "17", "value": 17},
-                                                                                                {"label": "18", "value": 18},
-                                                                                                {"label": "19", "value": 19},
-                                                                                                {"label": "20", "value": 20},
-                                                                                                {"label": "21", "value": 21},
-                                                                                                {"label": "22", "value": 22},
-                                                                                                {"label": "23", "value": 23},
-                                                                                                {"label": "24", "value": 24},
-                                                                                                {"label": "25", "value": 25},
-                                                                                                {"label": "26", "value": 26},
-                                                                                                {"label": "27", "value": 27}])
-                buzzer_gpio = self.cbpi.config.get("buzzer_gpio", None)
+                await self.cbpi.config.add("pixbuzzer_gpio", "", ConfigType.SELECT, "PixBuzzer GPIO", [{"label": "0", "value": p.gpio0},
+                                                                                                        {"label": "1", "value": p.gpio1},
+                                                                                                        {"label": "2", "value": p.gpio2},
+                                                                                                        {"label": "3", "value": p.gpio3}])
             except:
                 logger.warning('Unable to update config')
-                
-    async def buzzer_level(self):
-        global buzzer_level
-        buzzer_level = self.cbpi.config.get("buzzer_level", None)
-        if buzzer_level is None:
-            logger.info("INIT Buzzer Beep Level")
-            try:
-                await self.cbpi.config.add("buzzer_level", "HIGH", ConfigType.SELECT, "Buzzer Beep Level", [{"label": "HIGH","value": "HIGH"},
-                                                                                                            {"label": "LOW", "value": "LOW"}])
-                buzzer_level = self.cbpi.config.get("buzzer_level", None)
-            except:
-                logger.warning('Unable to update database')
 
-    async def buzzerEvent(self, cbpi, title, message, type, action):
-        if str(type) == "info" or str(type) == "success":
-            type = "standard"
-        else:
-            type = str(type)
-
-        self.buzzer = BuzzerThread(self.sound[type],buzzer_gpio,buzzer_level)
-        self.buzzer.daemon = False
-        self.buzzer.start()
-        self.buzzer.stop()
-
-    async def start_buzz(self):
-        self.buzzer = BuzzerThread(self.sound['standard'],buzzer_gpio,buzzer_level)
-        self.buzzer.daemon = False
-        self.buzzer.start()
-        self.buzzer.stop()
+    async def pixBuzz(self, cbpi, gpio):
+            gpio = pixbuzzer_gpio
+            p.gpio0_ctrl = 1
+            p.gpio0 = True
+            time.sleep(0.1)
+            p.gpio0 = False
 
 
 def setup(cbpi):
@@ -352,5 +255,5 @@ def setup(cbpi):
     cbpi.plugin.register("Digital Input (PiXtendV2S)", PixDigitalInputs)
     cbpi.plugin.register("Digital Output (PiXtendV2S)", PixDigitalOutputs)
     cbpi.plugin.register("Relay (PiXtendV2S)", PixRelays)
-    cbpi.plugin.register("Buzzer", Buzzer)
+    cbpi.plugin.register("PixBuzzer", PixBuzzer)
     pass
